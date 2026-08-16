@@ -54,7 +54,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/", "/index.html", "/dashboard.html", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/", "/login.html", "/cadastro.html", "/dashboard.html", "/css/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .headers(headers -> headers.frameOptions(frame -> frame.disable())) // necessário pro H2 console funcionar

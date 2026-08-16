@@ -1,9 +1,6 @@
 /* =========================================================
    api.js
    Camada única de comunicação com o back-end Spring Boot.
-   Toda chamada fetch do projeto passa por aqui — assim,
-   se a URL da API mudar (deploy, por exemplo), só se ajusta
-   em um lugar.
    ========================================================= */
 
 const Api = (() => {
@@ -35,11 +32,6 @@ const Api = (() => {
     return !!getToken();
   }
 
-  /**
-   * Faz uma requisição autenticada (ou não) para a API.
-   * @param {string} path - ex: "/fichas" ou "/exercicios/5"
-   * @param {object} options - { method, body, auth, isText }
-   */
   async function request(path, { method = "GET", body, auth = true, isText = false } = {}) {
     const headers = {};
 
@@ -55,11 +47,10 @@ const Api = (() => {
       body: body !== undefined ? JSON.stringify(body) : undefined,
     });
 
-    // Sessão expirada ou token inválido: manda de volta pro login
     if (response.status === 401 || response.status === 403) {
       clearSession();
-      if (!location.pathname.endsWith("index.html") && location.pathname !== "/") {
-        location.href = "index.html";
+      if (!location.pathname.endsWith("login.html") && !location.pathname.endsWith("cadastro.html")) {
+        location.href = "login.html";
       }
       throw new Error("Sessão expirada. Faça login novamente.");
     }
@@ -69,30 +60,25 @@ const Api = (() => {
       throw new Error(text || `Erro na requisição (status ${response.status})`);
     }
 
-    if (response.status === 204) return null; // sem corpo (delete)
+    if (response.status === 204) return null;
 
     return isText ? response.text() : response.json();
   }
 
   return {
-    // sessão
     getBaseUrl, setBaseUrl, getToken, setToken, clearSession, isLoggedIn,
 
-    // auth
     cadastrar: (dto) => request("/auth/cadastro", { method: "POST", body: dto, auth: false }),
     login: (dto) => request("/auth/login", { method: "POST", body: dto, auth: false, isText: true }),
 
-    // exercicios
     listarExercicios: () => request("/exercicios"),
     criarExercicio: (dto) => request("/exercicios", { method: "POST", body: dto }),
     deletarExercicio: (id) => request(`/exercicios/${id}`, { method: "DELETE" }),
 
-    // fichas
     listarFichas: () => request("/fichas"),
     criarFicha: (dto) => request("/fichas", { method: "POST", body: dto }),
     deletarFicha: (id) => request(`/fichas/${id}`, { method: "DELETE" }),
 
-    // ficha-exercicios
     listarVinculos: (fichaId) => request(`/ficha-exercicios?fichaId=${fichaId}`),
     adicionarVinculo: (fichaId, exercicioId, series, repeticoes) =>
       request(`/ficha-exercicios?fichaId=${fichaId}&exercicioId=${exercicioId}&series=${series}&repeticoes=${repeticoes}`,

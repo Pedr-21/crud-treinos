@@ -4,7 +4,7 @@
 
 (() => {
   if (!Api.isLoggedIn()) {
-    location.href = "index.html";
+    location.href = "login.html";
     return;
   }
 
@@ -31,7 +31,7 @@
   document.getElementById("user-chip").textContent = emailDoToken();
   document.getElementById("btn-logout").addEventListener("click", () => {
     Api.clearSession();
-    location.href = "index.html";
+    location.href = "login.html";
   });
 
   // ---------- navegação entre views ----------
@@ -65,7 +65,7 @@
   const formFicha = document.getElementById("form-ficha");
   const btnCancelarFicha = document.getElementById("btn-cancelar-ficha");
 
-  let exerciciosCache = []; // usado pra popular o <select> do modal
+  let exerciciosCache = [];
 
   btnNovaFicha.addEventListener("click", () => {
     formFicha.classList.toggle("hidden");
@@ -171,23 +171,39 @@
     exerciciosEmpty.classList.toggle("hidden", exerciciosCache.length > 0);
     exerciciosTbody.innerHTML = "";
 
+    const grupos = {};
     for (const ex of exerciciosCache) {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${escapeHtml(ex.nome)}</td>
-        <td>${escapeHtml(ex.grupoMuscular || "—")}</td>
-        <td><button class="row-delete" title="Excluir">✕</button></td>
-      `;
-      tr.querySelector(".row-delete").addEventListener("click", async () => {
-        if (!confirm(`Excluir o exercício "${ex.nome}"?`)) return;
-        try {
-          await Api.deletarExercicio(ex.id);
-          carregarExercicios();
-        } catch (err) {
-          alert("Não foi possível excluir: " + err.message);
-        }
-      });
-      exerciciosTbody.appendChild(tr);
+      const chave = (ex.grupoMuscular || "Outros").trim() || "Outros";
+      if (!grupos[chave]) grupos[chave] = [];
+      grupos[chave].push(ex);
+    }
+
+    const nomesGrupos = Object.keys(grupos).sort((a, b) => a.localeCompare(b, "pt-BR"));
+
+    for (const nomeGrupo of nomesGrupos) {
+      const trGrupo = document.createElement("tr");
+      trGrupo.className = "group-row";
+      trGrupo.innerHTML = `<td colspan="3">${escapeHtml(nomeGrupo)}</td>`;
+      exerciciosTbody.appendChild(trGrupo);
+
+      for (const ex of grupos[nomeGrupo]) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${escapeHtml(ex.nome)}</td>
+          <td>${escapeHtml(ex.grupoMuscular || "—")}</td>
+          <td><button class="row-delete" title="Excluir">✕</button></td>
+        `;
+        tr.querySelector(".row-delete").addEventListener("click", async () => {
+          if (!confirm(`Excluir o exercício "${ex.nome}"?`)) return;
+          try {
+            await Api.deletarExercicio(ex.id);
+            carregarExercicios();
+          } catch (err) {
+            alert("Não foi possível excluir: " + err.message);
+          }
+        });
+        exerciciosTbody.appendChild(tr);
+      }
     }
   }
 
@@ -209,12 +225,24 @@
     fichaAtual = ficha;
     modalTitulo.textContent = ficha.nome;
 
-    // garante que temos a lista de exercícios pro <select>
     if (exerciciosCache.length === 0) {
       try { exerciciosCache = await Api.listarExercicios(); } catch { /* segue mesmo assim */ }
     }
+
+    const gruposSelect = {};
+    for (const ex of exerciciosCache) {
+      const chave = (ex.grupoMuscular || "Outros").trim() || "Outros";
+      if (!gruposSelect[chave]) gruposSelect[chave] = [];
+      gruposSelect[chave].push(ex);
+    }
+    const nomesGruposSelect = Object.keys(gruposSelect).sort((a, b) => a.localeCompare(b, "pt-BR"));
+
     selectExercicio.innerHTML = `<option value="">Escolha um exercício…</option>` +
-      exerciciosCache.map((ex) => `<option value="${ex.id}">${escapeHtml(ex.nome)}</option>`).join("");
+      nomesGruposSelect.map((nomeGrupo) => `
+        <optgroup label="${escapeHtml(nomeGrupo)}">
+          ${gruposSelect[nomeGrupo].map((ex) => `<option value="${ex.id}">${escapeHtml(ex.nome)}</option>`).join("")}
+        </optgroup>
+      `).join("");
 
     modal.classList.remove("hidden");
     await carregarVinculos();
@@ -270,5 +298,5 @@
 
   // ---------- start ----------
   carregarFichas();
-  carregarExercicios(); // já carrega em segundo plano pro cache do <select>
+  carregarExercicios();
 })();

@@ -1,26 +1,29 @@
 /* =========================================================
    Diário de Treino — design tokens
-   Conceito: academia / ferro / giz. Fundo grafite, tipografia
-   condensada de pôster, acento amarelo-giz, dados em monoespaçada.
+   Paleta clara: fundo lavanda suave, texto azul-marinho,
+   azul vibrante como cor de ação. Inspirado em apps de
+   fitness/personal trainer, visual limpo e confiável.
    ========================================================= */
 
 :root {
-  --bg:        #14161a;
-  --surface:   #1d2024;
-  --surface-2: #24272c;
-  --border:    #33373d;
-  --text:      #edede8;
-  --text-dim:  #9a9ea5;
-  --accent:    #e8b23d;   /* amarelo-giz / fita de anilha */
-  --accent-ink:#14161a;
-  --steel:     #6f8ba6;   /* azul-aço, ação secundária */
-  --danger:    #d1533f;
+  --bg:        #eef1f8;
+  --surface:   #ffffff;
+  --surface-2: #f5f7fb;
+  --border:    #dfe3ec;
 
-  --font-display: 'Bebas Neue', sans-serif;
+  --text:      #1c2b4a;   /* azul-marinho, texto principal e títulos */
+  --text-dim:  #6b7280;   /* cinza neutro, texto secundário */
+
+  --blue:      #1b7feb;   /* azul vibrante, ação principal */
+  --blue-dark: #1665c2;
+  --blue-ink:  #ffffff;
+
+  --red:       #e0393f;   /* perigo/excluir */
+
+  --font-display: 'Poppins', sans-serif;
   --font-body:    'Inter', sans-serif;
-  --font-mono:    'JetBrains Mono', monospace;
 
-  --radius: 6px;
+  --radius: 10px;
 }
 
 * { box-sizing: border-box; }
@@ -39,31 +42,14 @@ button, input, select {
   color: inherit;
 }
 
-a { color: var(--steel); }
+a { color: var(--blue); }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--blue);
   outline-offset: 2px;
 }
 
 .hidden { display: none !important; }
-
-/* -----------------------------------------------------------
-   Signature element: the plate stripe — a repeating diagonal
-   hazard-tape motif, used once, thin, at the very top of the
-   auth screen. References gym floor tape / loading-zone tape.
-   ----------------------------------------------------------- */
-.plate-stripe {
-  height: 6px;
-  width: 100%;
-  background: repeating-linear-gradient(
-    -45deg,
-    var(--accent),
-    var(--accent) 14px,
-    var(--bg) 14px,
-    var(--bg) 28px
-  );
-}
 
 /* -----------------------------------------------------------
    Brand
@@ -71,43 +57,53 @@ a { color: var(--steel); }
 .brand {
   display: flex;
   align-items: center;
-  gap: 14px;
+  justify-content: center;
+  gap: 12px;
 }
 
-.brand--compact { gap: 10px; }
+.brand--compact { justify-content: flex-start; gap: 10px; }
 
 .brand-mark {
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
-  background: var(--accent);
-  color: var(--accent-ink);
+  width: 38px;
+  height: 38px;
+  background: var(--text);
+  color: #fff;
   font-family: var(--font-display);
-  font-size: 22px;
-  letter-spacing: 0.5px;
-  border-radius: 4px;
+  font-weight: 800;
+  font-size: 15px;
+  border-radius: 8px;
   flex-shrink: 0;
 }
 
 .brand-title {
   font-family: var(--font-display);
-  font-size: 28px;
-  letter-spacing: 0.5px;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.2px;
   margin: 0;
   line-height: 1;
+  color: var(--text);
 }
 
-.brand--compact .brand-title { font-size: 22px; }
+.brand-title-thin {
+  font-weight: 600;
+  color: var(--blue);
+}
+
+.brand--compact .brand-title { font-size: 19px; }
 
 .brand-sub {
-  margin: 4px 0 0;
-  font-size: 13px;
-  color: var(--text-dim);
+  margin: 14px 0 22px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--blue);
+  text-align: center;
 }
 
 /* -----------------------------------------------------------
-   Auth screen
+   Auth screens (login.html / cadastro.html)
    ----------------------------------------------------------- */
 .auth-body {
   min-height: 100vh;
@@ -131,48 +127,8 @@ a { color: var(--steel); }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 28px 26px 24px;
-}
-
-.auth-card .brand { margin-bottom: 22px; }
-
-.tabs {
-  display: flex;
-  gap: 4px;
-  background: var(--surface-2);
-  border-radius: var(--radius);
-  padding: 4px;
-  margin-bottom: 20px;
-}
-
-.tab {
-  flex: 1;
-  border: none;
-  background: transparent;
-  color: var(--text-dim);
-  padding: 9px 12px;
-  border-radius: 4px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-}
-
-.tab.active {
-  background: var(--accent);
-  color: var(--accent-ink);
-}
-
-.tabs--section {
-  padding: 0 24px;
-  max-width: 720px;
-  margin: 18px auto 0;
-  background: none;
-}
-
-.tabs--section .tab {
-  flex: none;
-  padding: 8px 18px;
+  padding: 32px 28px 26px;
+  box-shadow: 0 1px 3px rgba(28, 43, 74, 0.06), 0 8px 24px rgba(28, 43, 74, 0.05);
 }
 
 .auth-form {
@@ -187,36 +143,86 @@ a { color: var(--steel); }
   gap: 6px;
   font-size: 13px;
   color: var(--text-dim);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .field input {
-  background: var(--surface-2);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 10px 12px;
+  padding: 12px 14px;
   font-size: 15px;
   color: var(--text);
 }
 
-.field input:focus { border-color: var(--accent); }
+.field input::placeholder { color: #a3aab8; }
+.field input:focus { border-color: var(--blue); }
 
+.password-wrap {
+  position: relative;
+  display: flex;
+}
+
+.password-wrap input {
+  width: 100%;
+  padding-right: 42px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+}
+
+.toggle-password:hover { color: var(--blue); }
+.toggle-password.is-visible { color: var(--blue); }
+
+/* -----------------------------------------------------------
+   Buttons
+   ----------------------------------------------------------- */
 .btn-primary {
-  background: var(--accent);
-  color: var(--accent-ink);
+  background: var(--blue);
+  color: var(--blue-ink);
   border: none;
   border-radius: var(--radius);
-  padding: 11px 16px;
+  padding: 13px 16px;
   font-weight: 700;
   font-size: 15px;
   cursor: pointer;
-  transition: filter 0.15s;
+  transition: background 0.15s;
 }
 
-.btn-primary:hover { filter: brightness(1.08); }
+.btn-primary:hover { background: var(--blue-dark); }
 .btn-primary:active { filter: brightness(0.95); }
 
-.btn-sm { padding: 8px 14px; font-size: 13px; }
+.btn-sm { padding: 9px 14px; font-size: 13px; }
+
+.btn-outline {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  background: var(--surface);
+  color: var(--blue);
+  border: 1px solid var(--blue);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: background 0.15s;
+}
+
+.btn-outline:hover { background: #eaf3fe; }
 
 .btn-ghost {
   background: transparent;
@@ -229,14 +235,13 @@ a { color: var(--steel); }
   cursor: pointer;
 }
 
-.btn-ghost:hover { border-color: var(--steel); }
-
+.btn-ghost:hover { border-color: var(--blue); }
 .btn-icon { padding: 6px 10px; }
 
 .link-btn {
   background: none;
   border: none;
-  color: var(--steel);
+  color: var(--blue);
   text-decoration: underline;
   cursor: pointer;
   font-size: inherit;
@@ -246,11 +251,11 @@ a { color: var(--steel); }
 .form-msg {
   min-height: 18px;
   font-size: 13px;
-  margin: 0;
+  margin: 4px 0 0;
 }
 
-.form-msg[data-tone="error"] { color: var(--danger); }
-.form-msg[data-tone="ok"] { color: var(--accent); }
+.form-msg[data-tone="error"] { color: var(--red); }
+.form-msg[data-tone="ok"] { color: var(--blue); }
 
 .api-hint {
   font-size: 12px;
@@ -258,12 +263,12 @@ a { color: var(--steel); }
 }
 
 .api-hint code {
-  font-family: var(--font-mono);
+  font-family: monospace;
   color: var(--text);
 }
 
 /* -----------------------------------------------------------
-   App shell
+   App shell (dashboard.html)
    ----------------------------------------------------------- */
 .app-body {
   min-height: 100vh;
@@ -285,7 +290,6 @@ a { color: var(--steel); }
 }
 
 .user-chip {
-  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--text-dim);
   background: var(--surface-2);
@@ -300,6 +304,45 @@ a { color: var(--steel); }
   padding: 0 24px;
 }
 
+/* section tabs (Fichas / Exercícios) */
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--surface-2);
+  border-radius: var(--radius);
+  padding: 4px;
+}
+
+.tab {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  padding: 9px 12px;
+  border-radius: 7px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.tab.active {
+  background: var(--blue);
+  color: #fff;
+}
+
+.tabs--section {
+  padding: 6px;
+  max-width: 720px;
+  margin: 18px auto 0;
+  width: fit-content;
+}
+
+.tabs--section .tab {
+  flex: none;
+  padding: 8px 20px;
+}
+
 .view-head {
   display: flex;
   align-items: center;
@@ -309,9 +352,10 @@ a { color: var(--steel); }
 
 .view-title {
   font-family: var(--font-display);
-  font-size: 26px;
-  letter-spacing: 0.4px;
+  font-weight: 700;
+  font-size: 21px;
   margin: 0;
+  color: var(--text);
 }
 
 .inline-form {
@@ -327,14 +371,17 @@ a { color: var(--steel); }
 
 .inline-form input,
 .inline-form select {
-  background: var(--surface-2);
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 8px;
   padding: 9px 11px;
   font-size: 14px;
   flex: 1;
   min-width: 140px;
 }
+
+.inline-form input:focus,
+.inline-form select:focus { border-color: var(--blue); }
 
 .inline-form .input-num { flex: 0 0 90px; min-width: 0; }
 
@@ -345,10 +392,11 @@ a { color: var(--steel); }
   border-radius: var(--radius);
   padding: 20px;
   text-align: center;
+  background: var(--surface);
 }
 
 /* -----------------------------------------------------------
-   Fichas grid — cards look like small loading plates on a rack
+   Fichas grid
    ----------------------------------------------------------- */
 .grid {
   display: grid;
@@ -362,26 +410,28 @@ a { color: var(--steel); }
   border-radius: var(--radius);
   padding: 16px;
   cursor: pointer;
-  transition: border-color 0.15s, transform 0.1s;
+  transition: border-color 0.15s, transform 0.1s, box-shadow 0.15s;
   position: relative;
 }
 
 .ficha-card:hover {
-  border-color: var(--accent);
+  border-color: var(--blue);
   transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(28, 43, 74, 0.08);
 }
 
 .ficha-card h3 {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-weight: 700;
+  font-size: 16px;
   margin: 0 0 6px;
-  letter-spacing: 0.3px;
+  color: var(--text);
 }
 
 .ficha-card .ficha-count {
-  font-family: var(--font-mono);
   font-size: 12px;
-  color: var(--text-dim);
+  font-weight: 600;
+  color: var(--blue);
 }
 
 .ficha-card .ficha-delete {
@@ -397,7 +447,7 @@ a { color: var(--steel); }
   line-height: 1;
 }
 
-.ficha-card .ficha-delete:hover { color: var(--danger); }
+.ficha-card .ficha-delete:hover { color: var(--red); }
 
 /* -----------------------------------------------------------
    Exercicios table
@@ -416,6 +466,7 @@ a { color: var(--steel); }
   padding: 11px 14px;
   font-size: 14px;
   border-bottom: 1px solid var(--border);
+  color: var(--text);
 }
 
 .table th {
@@ -423,10 +474,12 @@ a { color: var(--steel); }
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-weight: 600;
+  font-weight: 700;
+  background: var(--surface-2);
 }
 
 .table tr:last-child td { border-bottom: none; }
+.table tr:hover td { background: var(--surface-2); }
 
 .table .row-delete {
   background: none;
@@ -436,7 +489,18 @@ a { color: var(--steel); }
   float: right;
 }
 
-.table .row-delete:hover { color: var(--danger); }
+.table .row-delete:hover { color: var(--red); }
+
+.table .group-row td {
+  background: #eaf3fe;
+  color: var(--blue-dark);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  padding: 8px 14px;
+  text-transform: uppercase;
+}
 
 /* -----------------------------------------------------------
    Modal (ficha detail)
@@ -444,7 +508,7 @@ a { color: var(--steel); }
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(28, 43, 74, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -461,6 +525,7 @@ a { color: var(--steel); }
   max-width: 480px;
   max-height: 85vh;
   overflow-y: auto;
+  box-shadow: 0 20px 50px rgba(28, 43, 74, 0.2);
 }
 
 .modal-head {
@@ -472,9 +537,10 @@ a { color: var(--steel); }
 
 .modal-head h3 {
   font-family: var(--font-display);
-  font-size: 24px;
+  font-weight: 700;
+  font-size: 19px;
   margin: 0;
-  letter-spacing: 0.3px;
+  color: var(--text);
 }
 
 .exercise-list {
@@ -492,19 +558,20 @@ a { color: var(--steel); }
   justify-content: space-between;
   background: var(--surface-2);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 8px;
   padding: 10px 12px;
 }
 
 .exercise-list .ex-name {
   font-weight: 600;
   font-size: 14px;
+  color: var(--text);
 }
 
 .exercise-list .ex-meta {
-  font-family: var(--font-mono);
+  font-weight: 700;
   font-size: 13px;
-  color: var(--accent);
+  color: var(--blue);
 }
 
 .exercise-list .ex-remove {
@@ -515,7 +582,7 @@ a { color: var(--steel); }
   font-size: 13px;
 }
 
-.exercise-list .ex-remove:hover { color: var(--danger); }
+.exercise-list .ex-remove:hover { color: var(--red); }
 
 /* -----------------------------------------------------------
    Responsive
@@ -523,7 +590,6 @@ a { color: var(--steel); }
 @media (max-width: 480px) {
   .topbar { padding: 14px 16px; }
   .app-main { padding: 0 16px; }
-  .tabs--section { padding: 0 16px; }
   .inline-form input, .inline-form select { flex: 1 1 100%; }
 }
 
