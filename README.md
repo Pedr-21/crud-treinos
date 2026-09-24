@@ -23,9 +23,6 @@ Este foi meu primeiro projeto full stack construído do zero — da modelagem do
 **Painel — fichas de treino**
 ![Painel de fichas](./screenshots/dashboard-fichas.png)
 
-**Painel — exercícios agrupados por grupo muscular**
-![Painel de exercícios](./screenshots/dashboard-exercicios.png)
-
 ---
 
 ## ✨ Funcionalidades
