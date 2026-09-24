@@ -15,7 +15,7 @@ Este foi meu primeiro projeto full stack construído do zero — da modelagem do
 -->
 
 **Tela de login**
-![Tela de login](./screenshots/login.png)
+![Tela de login](./screenshots/login.jpeg)
 
 **Tela de cadastro**
 ![Tela de cadastro](./screenshots/cadastro.png)
